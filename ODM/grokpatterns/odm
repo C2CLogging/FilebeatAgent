@@ -1,0 +1,3 @@
+ODMRULESET /%{WORD:ibm_odm_ruleapp_name}/%{VERSION:ibm_odm_ruleapp_version}(/%{WORD:ibm_odm_ruleset_name}/%{VERSION:ibm_odm_ruleset_version})?
+ODMMESSAGERULESET %{ANY}["\s]+%{ODMRULESET:ibm_odm_ruleset}["\s]+%{ANY}|
+ODMMESSAGE RESMGMT\s%{WORD:ibm_odm_resmgmt_module}:\s%{ANY:ibm_odm_resmgmt_message}|

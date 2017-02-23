@@ -1,0 +1,1 @@
+WEBACCESSLOG %{IPORHOST:ibm_remoteHost} (?:%{USER}) (?:%{USER}) \[%{HTTPDATE:ibm_datetime_date}\] \"%{WORD:ibm_requestMethod} %{URIPATH:ibm_uriPath}(?:\?%{NOTSPACE:ibm_queryString})? %{NOTSPACE:ibm_requestProtocol}\" %{NUMBER:ibm_responseCode_int:int} (%{NUMBER:ibm_bytesReceived_long:int}|-)\s?(%{NUMBER:ibm_elapsedTime_long:int}|-)?
