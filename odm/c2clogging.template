@@ -12,11 +12,11 @@ filebeat.prospectors:
 # change the path to point to your Liberty messages.log
 # for example "/opt/IBM/wlp/usr/servers/odm8900/logs/messages.log"
 #
-# change ibm_userDir to the directory under which WAS instance is running
-# for example ibm_userDir: "opt/IBM/wlp/usr/servers/odm8900"
+# change ibm_userDir to the directory under which Liberty instance is running
+# for example ibm_userDir: "/opt/IBM/wlp/usr/servers/odm8900"
 #
-# change ibm_ServerName to profile name of Liberty Server
-# for example ibm_ServerName: "odm8900"
+# change ibm_serverName to profile name of Liberty Server
+# for example ibm_serverName: "odm8900"
 #
 # change ibm_tags to type of ODM server
 # for example ibm_tags: "IBM_ODM_Decision_Center"
@@ -27,24 +27,24 @@ filebeat.prospectors:
 # for each of them
 #################################################################################
 
-- input_type: log
-  document_type: liberty_message_odm
-  paths:
-    - /opt/IBM/wlp/usr/servers/odm8900/logs/messages.log
-  fields:
-    ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
-    DateFormat: "1/2/06 15:04:05.000 MST"
-    TimestampField: "ibm_datetime_date"
-    ibm_userDir: "<your_ODM_Liberty_instance_dir>"
-    ibm_serverName: "<your_ODM_Liberty_Server_Name>"
-    ibm_tags: "<your_ODM_Liberty_tag>"
-    host: "host_value"
-  fields_under_root: true
-  exclude_lines: ['^$']
-  multiline:
-     pattern: ^\[
-     negate: true
-     match: after
+#- input_type: log
+#  document_type: liberty_message_odm
+#  paths:
+#    - /opt/IBM/wlp/usr/servers/odm8900/logs/messages.log
+#  fields:
+#    ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
+#    DateFormat: "1/2/06 15:04:05.000 MST"
+#    TimestampField: "ibm_datetime_date"
+#    ibm_userDir: "<your_ODM_Liberty_instance_dir>"
+#    ibm_serverName: "<your_ODM_Liberty_Server_Name>"
+#    ibm_tags: "<your_ODM_Liberty_tag>"
+#    host: "host_value"
+#  fields_under_root: true
+#  exclude_lines: ['^$']
+#  multiline:
+#     pattern: ^\[
+#     negate: true
+#     match: after
 
 ############# prospector for ODM logs (for ODM running on WAS) ####################
 # change the paths to point to your WAS SystemOut.log and WAS SystemErr.log
@@ -53,11 +53,9 @@ filebeat.prospectors:
 # change ibm_userDir to the directory under which WAS instance is running
 # for example ibm_userDir: /opt/IBM/WebSphere/AppServer/profiles/AppSrv01
 #
-# change was_ServerName to profile name of WAS Server
-# for example ibm_ServerName: AppSrv01
+# change ibm_serverName to profile name of WAS Server
+# for example ibm_serverName: AppSrv01
 #
-# change ibm_ServerName to profile name of Liberty Server
-# for example ibm_ServerName: "odm8900"
 #
 # change ibm_tags to type of ODM server
 # for example ibm_tags: "IBM_ODM_Decision_Center"
@@ -67,47 +65,48 @@ filebeat.prospectors:
 # the following sections for each instance and change ibm_userDir, ibm_serverName, ibm_tags
 # for each of them
 #################################################################################
-- input_type: log
-  document_type: twas_systemout_odm
-  paths:
-    - /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/logs/server1/SystemOut.log
+#- input_type: log
+#  document_type: twas_systemout_odm
+#  paths:
+#    - /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/logs/server1/SystemOut.log
 
-  multiline:
-    pattern: ^\[
-    negate: true
-    match: after
+#  multiline:
+#    pattern: ^\[
+#    negate: true
+#    match: after
 
-  fields:
-    ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
-    ibm_userDir: "<your_ODM_WAS_instance_dir>"
-    ibm_serverName: "<your_ODM_WAS_Server_Name>"
-    ibm_tags: "<your_ODM_WAS_tag>"
-    host: "host_value"
-    DateFormat: "1/2/06 15:04:05:000 MST"
-    TimestampField: "ibm_datetime_date"
-  fields_under_root: true
+#  fields:
+#    ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
+#    ibm_userDir: "<your_ODM_WAS_instance_dir>"
+#    ibm_serverName: "<your_ODM_WAS_Server_Name>"
+#    ibm_tags: "<your_ODM_WAS_tag>"
+#    host: "host_value"
+#    DateFormat: "1/2/06 15:04:05:000 MST"
+#    TimestampField: "ibm_datetime_date"
+#  fields_under_root: true
 
-- input_type: log
-  document_type: twas_systemerr_odm
-  paths:
-    - /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/logs/server1/SystemErr.log
+#- input_type: log
+#  document_type: twas_systemerr_odm
+#  paths:
+#    - /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/logs/server1/SystemErr.log
 
-  multiline:
-    pattern: ^\[
-    negate: true
-    match: after
+#  multiline:
+#    pattern: ^\[
+#    negate: true
+#    match: after
 
-  fields:
-    ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
-    ibm_userDir: "<your_ODM_WAS_instance_dir>"
-    ibm_serverName: "<your_ODM_WAS_Server_Name>"
-    ibm_tags: "<your_ODM_WAS_tag>"
-    host: "host_value"
-    DateFormat: "1/2/06 15:04:05:000 MST"
-    TimestampField: "ibm_datetime_date"
-  fields_under_root: true
+#  fields:
+#    ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
+#    ibm_userDir: "<your_ODM_WAS_instance_dir>"
+#    ibm_serverName: "<your_ODM_WAS_Server_Name>"
+#    ibm_tags: "<your_ODM_WAS_tag>"
+#    host: "host_value"
+#    DateFormat: "1/2/06 15:04:05:000 MST"
+#    TimestampField: "ibm_datetime_date"
+#  fields_under_root: true
 
 ## end of prospectors
+
 ###########################################################################################
 # processors define processing to be performed on each type of logs before they are
 # sent to their end point
@@ -116,42 +115,53 @@ filebeat.prospectors:
 ###########################################################################################
 
 processors:
- - drop_fields:
-     when:
-        and:
-          - equals:
-              type: liberty_message_odm
-          - grok:
-              message: "%{LIBERTYMESSAGE}"
-          - grok:
-              message: "%{ODMMESSAGE}"
-          - grok:
-              message: "%{ODMMESSAGERULESET}"
-     fields: ["beat","offset","DateFormat","TimestampField"]
- - drop_fields:
-     when:
-        and:
-          - equals:
-              type: twas_systemout_odm
-          - grok:
-              message: "%{WASSYSOUT}"
-          - grok:
-              message: "%{ODMMESSAGE}"
-          - grok:
-              message: "%{ODMMESSAGERULESET}"
-     fields: ["beat","offset","DateFormat","TimestampField"]
-
- - drop_fields:
-     when:
-        and:
-          - equals:
-              type: twas_systemerr_odm
-          - grok:
-              message: "%{WASSYSOUT}"
-          - grok:
-              message: "%{ODMMESSAGE}"
-          - grok:
-              message: "%{ODMMESSAGERULESET}"
-     fields: ["beat","offset","DateFormat","TimestampField"]
+# - drop_fields:
+#     when:
+#        and:
+#          - equals:
+#              type: liberty_message_odm
+#          - or:
+#               - grok:
+#                    message: "%{LIBERTYMESSAGEHEADER}"
+#               - and:
+#                    - grok:
+#                         message: "%{LIBERTYMESSAGE}"
+#                    - grok:
+#                         message: "%{ODMMESSAGE}"
+#                    - grok:
+#                        message: "%{ODMMESSAGERULESET}"
+#     fields: ["beat","offset","DateFormat","TimestampField"]
+# - drop_fields:
+#     when:
+#        and:
+#          - equals:
+#               type: twas_systemout_odm
+#          - or:
+#               - grok:
+#                    message: "%{WASSYSOUTHEADER}"
+#               - and:
+#                    - grok:
+#                         message: "%{WASSYSOUT}"
+#                    - grok:
+#                         message: "%{ODMMESSAGE}"
+#                    - grok:
+#                        message: "%{ODMMESSAGERULESET}"
+#     fields: ["beat","offset","DateFormat","TimestampField"]
+# - drop_fields:
+#     when:
+#        and:
+#          - equals:
+#              type: twas_systemerr_odm
+#          - or:
+#               - grok:
+#                    message: "%{WASSYSOUTHEADER}"
+#               - and:
+#                    - grok:
+#                         message: "%{WASSYSOUT}"
+#                    - grok:
+#                         message: "%{ODMMESSAGE}"
+#                    - grok:
+#                        message: "%{ODMMESSAGERULESET}"
+#     fields: ["beat","offset","DateFormat","TimestampField"]
 
 ## end of processors

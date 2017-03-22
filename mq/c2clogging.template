@@ -8,50 +8,47 @@ filebeat.prospectors:
 # you can use different prospectors for various configurations.
 # Below are the prospector specific configurations.
 
-############ prospector for MQ AMQERR logs ##############################
-# change the path to point to your IHS access log
-# example : /opt/IBM/HTTPServer/logs
+############# prospector for MQ AMQERR logs #################################
+# Section to handle the IBM MQ AMQERR logs
 #
-# we have tested this with IHS 8.5.5 and IHS 9.0
-# Note : with IHS 8.5.5 elapsedTime is not added automatially. you need to change
-# LogFormat in httpd.conf file to
-# LogFormat "%h %l %u %t \"%r\" %>s %b %D" common
+# Do not change the  "document_type". Name here refers to IBM MQ script in
+# "grokpatterns" directory.
 #
-# example access log for 8.5.5 with elapedTime is as follows
-# 9.42.75.197 - - [10/Nov/2016:19:01:13 +0530] "GET /DailyReg/events HTTP/1.1" 502 492 300098589
+# Change the path to point to your IBM MQ AMQERR logs
+# for example /var/mqm/errors/AMQERR01.LOG
 #
-# example access log for 9.0 is as follows
-# 9.42.75.197 - - [10/Nov/2016:19:01:13 +0530] "GET /DailyReg/events HTTP/1.1" 502 492 300098589 +
+# IBM MQ QMgr AMQERR logs can also be monitored by adding their path.
+# QMgr AMQERR logs will be available under <QMgr>/errors directory.
+# for example:
+#    - /var/mqm/qmgrs/<QMgr Name1>/errors/AMQERR01.LOG
+#    - /var/mqm/qmgrs/<QMgr Name2>/errors/AMQERR01.LOG
 #
-# replace ibm_userDir with the folder name under which IHS is running
-# example: ibm_userDir: "/opt/IBM/HTTPServer"
+# Change the DateFormat as per your computer's setting(24hour or AM/PM)
+# Uncomment the format setting that's suitable to your computer and
+# comment out the other.
 #
-# replace ibm_ServerName with IHS serverName
-# example : ibm_serverName: "HTTPServer"
-###########################################################################
+# An instance of filebeat running per computer will suffice to monitor logs of
+# IBM MQ and its QMgrs running on that computer.
+#################################################################################
+#- input_type: log
+#  document_type: mq_errorLogs
+#  paths:
+#    - /var/mqm/errors/AMQERR01.LOG
 
-- input_type: log
-  document_type: mq_errorLogs
-  paths:
-    - /var/mqm/errors/*
-    #----------------------------
-    #   For QMGr error logs,add a path for each QMGr error logs processing.
-    #----------------------------
-    #   - /var/mqm/qmgrs/<QMGr Name>/errors/*
+#  multiline:
+#    pattern: ^-----
+#    negate: true
+#    match: before
 
-  multiline:
-    pattern: ^-----
-    negate: true
-    match: before
-
-  fields:
-         ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
-         DateFormat: "01/02/2006 15:04:05"
+#  fields:
+#         ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
+#         DateFormat: "01/02/2006 15:04:05"
 #        DateFormat: "01/02/2006 03:04:05 PM"
-         TimestampField: "ibm_datetime"
-  fields_under_root: true
+#         TimestampField: "ibm_datetime"
+#  fields_under_root: true
 
 ## end of prospectors
+
 ###########################################################################################
 # processors define processing to be performed on each type of logs before they are
 # sent to their end point
@@ -60,16 +57,16 @@ filebeat.prospectors:
 ###########################################################################################
 
 processors:
- - drop_fields:
-     when:
-        and:
-          - equals:
-              type: mq_errorLogs
-          - or:
-            - grok:
-               message: "%{MQ_ERROR}"
-            - grok:
-               message: "%{MQ_ERRORENV}"
-     fields: ["beat","offset"]
+# - drop_fields:
+#     when:
+#        and:
+#          - equals:
+#              type: mq_errorLogs
+#          - or:
+#            - grok:
+#               message: "%{MQ_ERROR}"
+#            - grok:
+#               message: "%{MQ_ERRORENV}"
+#     fields: ["beat","offset"]
 
 ## end of processors
