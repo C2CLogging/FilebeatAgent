@@ -1,0 +1,62 @@
+################### Filebeat Configuration for C2Clogging ###################
+
+#=========================== Filebeat prospectors =============================
+
+filebeat.prospectors:
+
+# Each - is a prospector. Most options can be set at the prospector level, so
+# you can use different prospectors for various configurations.
+# Below are the prospector specific configurations.
+
+############# prospector for IIB logs #################################
+#
+# Do not change the  "document_type". Name here refers to IBM IIB script in
+# "grokpatterns" directory.
+#
+# Change the DateFormat as per your computer's setting(24hour or AM/PM)
+# Uncomment the format setting that's suitable to your computer and
+# comment out the other.
+#
+# An instance of filebeat running per computer will suffice to monitor logs of
+# IBM MQ and its QMgrs running on that computer.
+#################################################################################
+#- input_type: log
+#  document_type: iibLogs
+#  paths:
+#    - /var/mqm/errors/iib.LOG
+
+#  multiline:
+#    pattern: ^-----
+#    negate: true
+#    match: before
+
+#  fields:
+#         ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
+#         DateFormat: "01/02/2006 15:04:05"
+#        DateFormat: "01/02/2006 03:04:05 PM"
+#         TimestampField: "ibm_datetime"
+#  fields_under_root: true
+
+## end of prospectors
+
+###########################################################################################
+# processors define processing to be performed on each type of logs before they are
+# sent to their end point
+# grok pattern can be specified under grok condition directly or in a file present
+# under grokpatterns folder
+###########################################################################################
+
+processors:
+# - drop_fields:
+#     when:
+#        and:
+#          - equals:
+#              type: iibLogs
+#          - or:
+#            - grok:
+#               message: "%{IIB_ERROR}"
+#            - grok:
+#               message: "%{IIB_ERRORENV}"
+#     fields: ["beat","offset"]
+
+## end of processors
