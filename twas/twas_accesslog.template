@@ -1,0 +1,56 @@
+################### Filebeat Configuration for C2Clogging ###################
+
+#=========================== Filebeat prospectors =============================
+
+filebeat.prospectors:
+
+# Each - is a prospector. Most options can be set at the prospector level, so
+# you can use different prospectors for various configurations.
+# Below are the prospector specific configurations.
+
+############ prospector for IHS access_log ################################
+# change the path to point to your IHS access log
+# example : /opt/IBM/HTTPServer/logs
+#
+# we have tested this with IHS 8.5.5 and IHS 9.0
+# Note : Change LogFormat in your httpd.conf file to
+#        LogFormat "%h %l %u %t \"%r\" %>s %b %D" common
+#
+# example access log for 8.5.5 with elapedTime is as follows
+# 9.42.75.197 - - [10/Nov/2016:19:01:13 +0530] "GET /DailyReg/events HTTP/1.1" 502 492 300098589
+#
+# example access log for 9.0 is as follows
+# 9.42.75.197 - - [10/Nov/2016:19:01:13 +0530] "GET /DailyReg/events HTTP/1.1" 502 492 300098589 +
+#
+# replace ibm_userDir with the folder name under which IHS is running
+# example: ibm_userDir: "/opt/IBM/HTTPServer"
+#
+# replace ibm_serverName with IHS serverName
+# example : ibm_serverName: "HTTPServer"
+###########################################################################
+#- input_type: log
+#  document_type: twas_accesslog
+#  paths:
+#    - /opt/IBM/HTTPServer/logs/access_log
+#  fields:
+#         ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
+#         ibm_userDir: "<your_IHS_instance_dir>"
+#         ibm_serverName: "<your_IHS_Server_Name>"
+#         host: "host_value"
+#         DateFormat: "02/Jan/2006:15:04:05 -0700"
+#         TimestampField: "ibm_datetime_date"
+#  fields_under_root: true
+
+## end of prospectors
+
+processors:
+# - drop_fields:
+#     when:
+#        and:
+#          - equals:
+#              type: twas_accesslog
+#          - grok:
+#              message: "%{WEBACCESSLOG}"
+#     fields: ["beat","message","offset","DateFormat","TimestampField"]
+
+## end of processors

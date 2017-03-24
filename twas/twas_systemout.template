@@ -1,0 +1,59 @@
+################### Filebeat Configuration for C2Clogging ###################
+
+#=========================== Filebeat prospectors =============================
+
+filebeat.prospectors:
+
+# Each - is a prospector. Most options can be set at the prospector level, so
+# you can use different prospectors for various configurations.
+# Below are the prospector specific configurations.
+
+############# prospector for WAS SystemOut #################################
+# change the path to point to your WAS SystemOut.log
+# for example /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/logs/server1/SystemOut.log
+#
+# change ibm_userDir to the directory under which WAS instance is running
+# for example ibm_userDir: /opt/IBM/WebSphere/AppServer/profiles/AppSrv01
+#
+# change ibm_serverName to profile name of WAS Server
+# for example ibm_serverName: AppSrv01
+#
+# if there are more than one instance of WAS running on same host, copy,paste
+# the following sections for each WAS instance and change ibm_userDir, ibm_serverName
+# for each of them
+#################################################################################
+#- input_type: log
+#  document_type: twas_systemout
+#  paths:
+#    - /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/logs/server1/SystemOut.log
+
+#  multiline:
+#    pattern: ^\[
+#    negate: true
+#    match: after
+
+#  fields:
+#    ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
+#    ibm_userDir: "<your_WAS_instance_dir>"
+#    ibm_serverName: "<your_WAS_Server_Name>"
+#    host: "host_value"
+#    DateFormat: "1/2/06 15:04:05:000 MST"
+#    TimestampField: "ibm_datetime_date"
+#  fields_under_root: true
+
+## end of prospectors
+
+processors:
+# - drop_fields:
+#     when:
+#        and:
+#           - equals:
+#               type: twas_systemout
+#           - or:
+#             - grok:
+#                 message: "%{WASSYSOUTHEADER}"
+#             - grok:
+#                 message: "%{WASSYSOUT}"
+#     fields: ["beat","offset","DateFormat","TimestampField"]
+
+## end of processors
