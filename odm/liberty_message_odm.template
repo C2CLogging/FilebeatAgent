@@ -1,0 +1,65 @@
+filebeat.prospectors:
+
+# Each - is a prospector. Most options can be set at the prospector level, so
+# you can use different prospectors for various configurations.
+# Below are the prospector specific configurations.
+
+############# prospector for ODM logs (for ODM running on Liberty) #############
+# change the path to point to your Liberty messages.log
+# for example "/opt/IBM/wlp/usr/servers/odm8900/logs/messages.log"
+#
+# change ibm_userDir to the directory under which Liberty instance is running
+# for example ibm_userDir: "/opt/IBM/wlp/usr/servers/odm8900"
+#
+# change ibm_serverName to profile name of Liberty Server
+# for example ibm_serverName: "odm8900"
+#
+# change ibm_tags to type of ODM server
+# for example ibm_tags: "IBM_ODM_Decision_Center"
+#          or ibm_tags: "IBM_ODM_Decision_Server"
+#
+# if there are more than one instance of ODM on Liberty running on same host, copy,paste
+# the following sections for each instance and change ibm_userDir, ibm_serverName, ibm_tags
+# for each of them
+#################################################################################
+
+#- input_type: log
+#  document_type: liberty_message_odm
+#  paths:
+#    - /opt/IBM/wlp/usr/servers/odm8900/logs/messages.log
+#  fields:
+#    ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
+#    DateFormat: "1/2/06 15:04:05.000 MST"
+#    TimestampField: "ibm_datetime_date"
+#    ibm_userDir: "<your_ODM_Liberty_instance_dir>"
+#    ibm_serverName: "<your_ODM_Liberty_Server_Name>"
+#    ibm_tags: "<your_ODM_Liberty_tag>"
+#    host: "host_value"
+#  fields_under_root: true
+#  exclude_lines: ['^$']
+#  multiline:
+#     pattern: ^\[
+#     negate: true
+#     match: after
+
+## end of prospectors
+
+processors:
+# - drop_fields:
+#     when:
+#        and:
+#          - equals:
+#              type: liberty_message_odm
+#          - or:
+#               - grok:
+#                    message: "%{LIBERTYMESSAGEHEADER}"
+#               - and:
+#                    - grok:
+#                         message: "%{LIBERTYMESSAGE}"
+#                    - grok:
+#                         message: "%{ODMMESSAGE}"
+#                    - grok:
+#                        message: "%{ODMMESSAGERULESET}"
+#     fields: ["beat","offset","DateFormat","TimestampField"]
+
+## end of processors
