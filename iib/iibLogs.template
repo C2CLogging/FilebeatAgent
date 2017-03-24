@@ -1,7 +1,3 @@
-################### Filebeat Configuration for C2Clogging ###################
-
-#=========================== Filebeat prospectors =============================
-
 filebeat.prospectors:
 
 # Each - is a prospector. Most options can be set at the prospector level, so
@@ -17,8 +13,6 @@ filebeat.prospectors:
 # Uncomment the format setting that's suitable to your computer and
 # comment out the other.
 #
-# An instance of filebeat running per computer will suffice to monitor logs of
-# IBM MQ and its QMgrs running on that computer.
 #################################################################################
 #- input_type: log
 #  document_type: iibLogs
@@ -38,13 +32,6 @@ filebeat.prospectors:
 #  fields_under_root: true
 
 ## end of prospectors
-
-###########################################################################################
-# processors define processing to be performed on each type of logs before they are
-# sent to their end point
-# grok pattern can be specified under grok condition directly or in a file present
-# under grokpatterns folder
-###########################################################################################
 
 processors:
 # - drop_fields:
