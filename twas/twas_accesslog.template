@@ -28,29 +28,29 @@ filebeat.prospectors:
 # replace ibm_serverName with IHS serverName
 # example : ibm_serverName: "HTTPServer"
 ###########################################################################
-#- input_type: log
-#  document_type: twas_accesslog
-#  paths:
-#    - /opt/IBM/HTTPServer/logs/access_log
-#  fields:
-#         ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
-#         ibm_userDir: "<your_IHS_instance_dir>"
-#         ibm_serverName: "<your_IHS_Server_Name>"
-#         host: "host_value"
-#         DateFormat: "02/Jan/2006:15:04:05 -0700"
-#         TimestampField: "ibm_datetime_date"
-#  fields_under_root: true
+- input_type: log
+  document_type: twas_accesslog
+  paths:
+    - /opt/IBM/HTTPServer/logs/access_log
+  fields:
+         ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
+         ibm_userDir: "<your_IHS_instance_dir>"
+         ibm_serverName: "<your_IHS_Server_Name>"
+         host: "host_value"
+         DateFormat: "02/Jan/2006:15:04:05 -0700"
+         TimestampField: "ibm_datetime_date"
+  fields_under_root: true
 
 ## end of prospectors
 
 processors:
-# - drop_fields:
-#     when:
-#        and:
-#          - equals:
-#              type: twas_accesslog
-#          - grok:
-#              message: "%{WEBACCESSLOG}"
-#     fields: ["beat","message","offset","DateFormat","TimestampField"]
+ - drop_fields:
+     when:
+        and:
+          - equals:
+              type: twas_accesslog
+          - grok:
+              message: "%{WEBACCESSLOG}"
+     fields: ["beat","message","offset","DateFormat","TimestampField"]
 
 ## end of processors
