@@ -26,36 +26,36 @@ filebeat.prospectors:
 # An instance of filebeat running per computer will suffice to monitor logs of
 # IBM MQ and its QMgrs running on that computer.
 #################################################################################
-#- input_type: log
-#  document_type: mq_errorLogs
-#  paths:
-#    - /var/mqm/errors/AMQERR01.LOG
+- input_type: log
+  document_type: mq_errorLogs
+  paths:
+    - /var/mqm/errors/AMQERR01.LOG
 
-#  multiline:
-#    pattern: ^-----
-#    negate: true
-#    match: before
+  multiline:
+    pattern: ^-----
+    negate: true
+    match: before
 
-#  fields:
-#         ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
-#         DateFormat: "01/02/2006 15:04:05"
+  fields:
+         ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
+         DateFormat: "01/02/2006 15:04:05"
 #        DateFormat: "01/02/2006 03:04:05 PM"
-#         TimestampField: "ibm_datetime"
-#  fields_under_root: true
+         TimestampField: "ibm_datetime"
+  fields_under_root: true
 
 ## end of prospectors
 
 processors:
-# - drop_fields:
-#     when:
-#        and:
-#          - equals:
-#              type: mq_errorLogs
-#          - or:
-#            - grok:
-#               message: "%{MQ_ERROR}"
-#            - grok:
-#               message: "%{MQ_ERRORENV}"
-#     fields: ["beat","offset"]
+ - drop_fields:
+     when:
+        and:
+          - equals:
+              type: mq_errorLogs
+          - or:
+            - grok:
+               message: "%{MQ_ERROR}"
+            - grok:
+               message: "%{MQ_ERRORENV}"
+     fields: ["beat","offset"]
 
 ## end of processors
