@@ -4,7 +4,7 @@ filebeat.prospectors:
 # you can use different prospectors for various configurations.
 # Below are the prospector specific configurations.
 
-############# prospector for SystemOut ODM logs (for ODM running on WAS) ####################
+############# prospector for ODM logs (for ODM running on WAS) ####################
 # change the paths to point to your WAS SystemOut.log and WAS SystemErr.log
 # for example /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/logs/server1/SystemOut.log
 #
@@ -23,44 +23,44 @@ filebeat.prospectors:
 # the following sections for each instance and change ibm_userDir, ibm_serverName, ibm_tags
 # for each of them
 #################################################################################
-#- input_type: log
-#  document_type: twas_systemout_odm
-#  paths:
-#    - /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/logs/server1/SystemOut.log
+- input_type: log
+  document_type: twas_systemout_odm
+  paths:
+    - /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/logs/server1/SystemOut.log
 
-#  multiline:
-#    pattern: ^\[
-#    negate: true
-#    match: after
+  multiline:
+    pattern: ^\[
+    negate: true
+    match: after
 
-#  fields:
-#    ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
-#    ibm_userDir: "<your_ODM_WAS_instance_dir>"
-#    ibm_serverName: "<your_ODM_WAS_Server_Name>"
-#    ibm_tags: "<your_ODM_WAS_tag>"
-#    host: "host_value"
-#    DateFormat: "1/2/06 15:04:05:000 MST"
-#    TimestampField: "ibm_datetime_date"
-#  fields_under_root: true
+  fields:
+    ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
+    ibm_userDir: "<your_ODM_WAS_instance_dir>"
+    ibm_serverName: "<your_ODM_WAS_Server_Name>"
+    ibm_tags: "<your_ODM_WAS_tag>"
+    host: "host_value"
+    DateFormat: "1/2/06 15:04:05:000 MST"
+    TimestampField: "ibm_datetime_date"
+  fields_under_root: true
 
 ## end of prospectors
 
 processors:
-# - drop_fields:
-#     when:
-#        and:
-#          - equals:
-#               type: twas_systemout_odm
-#          - or:
-#               - grok:
-#                    message: "%{WASSYSOUTHEADER}"
-#               - and:
-#                    - grok:
-#                         message: "%{WASSYSOUT}"
-#                    - grok:
-#                         message: "%{ODMMESSAGE}"
-#                    - grok:
-#                        message: "%{ODMMESSAGERULESET}"
-#     fields: ["beat","offset","DateFormat","TimestampField"]
+ - drop_fields:
+     when:
+        and:
+          - equals:
+               type: twas_systemout_odm
+          - or:
+               - grok:
+                    message: "%{WASSYSOUTHEADER}"
+               - and:
+                    - grok:
+                         message: "%{WASSYSOUT}"
+                    - grok:
+                         message: "%{ODMMESSAGE}"
+                    - grok:
+                        message: "%{ODMMESSAGERULESET}"
+     fields: ["beat","offset","DateFormat","TimestampField"]
 
 ## end of processors
