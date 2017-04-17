@@ -1,5 +1,5 @@
 # FilebeatAgent
-This Git repository is to maintain the content os different products that use C2C Logging Filebeat Agent.
+This Git repository is to maintain the content os different products that use C2C Logging (Filebeat) Agent.
 
 Guideline for Product teams:
 - In the GIT repository the folder name of the product which contains its contents should be its equivalent dashboard name.
