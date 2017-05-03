@@ -8,49 +8,47 @@ filebeat.prospectors:
 # you can use different prospectors for various configurations.
 # Below are the prospector specific configurations.
 
-############ prospector for IHS access_log ################################
-# change the path to point to your IHS access log
-# example : /opt/IBM/HTTPServer/logs
+######## prospector for WAS access_log ####################################
+# change the path to point to your WAS access log
+# example : /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/logs/server1/http_access.log
 #
-# we have tested this with IHS 8.5.5 and IHS 9.0
-# Note : Change LogFormat in your httpd.conf file to
-#        LogFormat "%h %l %u %t \"%r\" %>s %b %D" common
+# we have tested this with WAS 8.5.5 and WAS 9.0
+# Note : Access log format must be set to: %h %i %u %t "%r" %s %b %D
+#        See "Enabling Access Logging" for instructions on setting the access log format
 #
-# example access log for 8.5.5 with elapedTime is as follows
-# 9.42.75.197 - - [10/Nov/2016:19:01:13 +0530] "GET /DailyReg/events HTTP/1.1" 502 492 300098589
+# example access log for WAS with elapsedTime is as follows
 #
-# example access log for 9.0 is as follows
-# 9.42.75.197 - - [10/Nov/2016:19:01:13 +0530] "GET /DailyReg/events HTTP/1.1" 502 492 300098589 +
+# 192.168.99.1 - - [09/Feb/2017:15:36:09 +0000] "GET /hitcount?selection=EJB HTTP/1.1" 200 2223 5111000
 #
-# replace ibm_userDir with the folder name under which IHS is running
-# example: ibm_userDir: "/opt/IBM/HTTPServer"
+# replace ibm_userDir with the folder name under which WAS is running
+# example: ibm_userDir: "/opt/IBM/WebSphere/AppServer/profiles/AppSrv01"
 #
-# replace ibm_serverName with IHS serverName
-# example : ibm_serverName: "HTTPServer"
+# replace ibm_serverName with WAS serverName
+# example : ibm_serverName: "AppSrv01"
 ###########################################################################
-#- input_type: log
-#  document_type: twas_accesslog
-#  paths:
-#    - /opt/IBM/HTTPServer/logs/access_log
-#  fields:
-#         ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
-#         ibm_userDir: "<your_IHS_instance_dir>"
-#         ibm_serverName: "<your_IHS_Server_Name>"
-#         host: "host_value"
-#         DateFormat: "02/Jan/2006:15:04:05 -0700"
-#         TimestampField: "ibm_datetime_date"
-#  fields_under_root: true
+- input_type: log
+  document_type: twas_accesslog
+  paths:
+    - /opt/IBM/WebSphere/AppServer/profiles/AppSrv01/logs/server1/http_access.log
+  fields:
+         ALCH_TENANT_ID: "ALCH_TENANT_ID_VALUE"
+         ibm_userDir: "<your_WAS_instance_dir>"
+         ibm_serverName: "<your_WAS_Server_Name>"
+         host: "host_value"
+         DateFormat: "02/Jan/2006:15:04:05 -0700"
+         TimestampField: "ibm_datetime_date"
+  fields_under_root: true
 
 ## end of prospectors
 
 processors:
-# - drop_fields:
-#     when:
-#        and:
-#          - equals:
-#              type: twas_accesslog
-#          - grok:
-#              message: "%{WEBACCESSLOG}"
-#     fields: ["beat","message","offset","DateFormat","TimestampField"]
+ - drop_fields:
+     when:
+        and:
+          - equals:
+              type: twas_accesslog
+          - grok:
+              message: "%{WEBACCESSLOG}"
+     fields: ["beat","message","offset","DateFormat","TimestampField"]
 
 ## end of processors
